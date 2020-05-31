@@ -1,9 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
+import ChooseDate from './ChooseDate';
 import './App.css';
 
 class App extends React.Component {
   state = {
+    startDate: new Date('01/07/2019'),
+    endDate: new Date('04/07/2019'),
     data: [
       {
         date: '01/07/2019',
@@ -46,14 +48,39 @@ class App extends React.Component {
     this.setState({ data: res });
   }
 
+  changed() {
+    let res = [];
+    this.state.data.forEach(row => {
+      if(row.date >= this.state.startDate || row.date <= this.state.endDate) {
+        res.push(row);
+      }
+    });
+    this.setState({ data: res });
+  }
+
   render() {
     return (
       <div className="App">
-        <table>
+        <span>From: </span><ChooseDate changed={() => this.changed()} date={this.state.startDate} />
+        <span>To: </span><ChooseDate changed={()=>this.changed()} date={this.state.endDate}/>
+        <div className="flexbox">
+        <div>
+          <span>date</span>
+          <span>bananas</span>
+          <span>strawberries</span>
+          <span>apples</span>
+          <span>oranges</span>
+        </div>
           {this.state.data.map((row, key) => {
-          return (<tr key={key} onClick={() => this.findDates(row.date)}><td>{row.date}</td><td>{row.bananas}</td><td>{row.strawberries}</td><td>{row.apples}</td><td>{row.oranges}</td></tr>)
+          return (<div key={key} onClick={() => this.findDates(row.date)}>
+                    <span>{row.date}</span>
+                    <span>{row.bananas}</span>
+                    <span>{row.strawberries}</span>
+                    <span>{row.apples}</span>
+                    <span>{row.oranges}</span>
+                  </div>)
           })}
-        </table>
+        </div>
       </div>
     );
   }
